@@ -1,0 +1,33 @@
+﻿@model CoreDemo.Areas.Admin.Models.UserEditModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Kullanıcı Düzenle</h2>
+
+<form asp-action="Edit" asp-controller="AdminUser" method="post">
+    <div class="form-group">
+        <label for="UserName">Kullanıcı Adı</label>
+        <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName">
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
+    </div>
+    <div class="form-group">
+        <label for="NameSurname">Ad Soyad</label>
+        <input type="text" class="form-control" id="NameSurname" name="NameSurname" value="@Model.NameSurname">
+    </div>
+    <div class="form-group">
+        <label for="NewPassword">Yeni Şifre</label>
+        <input type="password" class="form-control" id="NewPassword" name="NewPassword">
+    </div>
+    <div class="form-group">
+        <label for="ConfirmNewPassword">Yeni Şifre Onay</label>
+        <input type="password" class="form-control" id="ConfirmNewPassword" name="ConfirmNewPassword">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+

@@ -1,0 +1,60 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<EntityLayer.Concrate.News>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<style>
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+    display: inline-block;
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: white;
+    background-color: #007BFF; /* Mavi arka plan rengi */
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #0056b3; /* Hover olduğunda daha koyu bir mavi */
+}
+
+
+</style>
+<section class="blog-section spad">
+    <div class="container">
+        <!-- Blog post -->
+
+        @foreach (var item in Model)
+        {
+            <div class="blog-item">
+                <img src="@item.NewsImage" alt="">
+                <div class="blog-date">@item.NewsCreateTime</div>
+                <h3>@item.NewsTitle</h3>
+                @*<div class="blog-meta">by <a href="">Alan Smith</a> in <a href="">Music</a></div>*@
+                <p>@item.NewsContent </p>
+            </div>
+        }
+        <!-- Blog post -->
+        <!-- Blog post -->
+
+        <div class="pagination">
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+        </div>
+    </div>
+</section>
+

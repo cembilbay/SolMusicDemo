@@ -1,0 +1,79 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<EntityLayer.Concrate.AppUser>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<head>
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<style>
+    /* Sıralama linklerinin stilini değiştirme */
+    .table a {
+        color: black; /* veya istediğiniz renk */
+        text-decoration: none;
+    }
+
+        .table a:hover {
+            color: blue; /* veya istediğiniz renk */
+        }
+</style>
+
+<h2>Kullanıcılar</h2>
+
+<a class="btn btn-primary" href="/Register/Index">Yeni Kullanıcı Oluştur</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-controller="AdminUser" asp-route-sortOrder="@("username_desc" == ViewBag.CurrentSort ? "username" : "username_desc")" asp-route-page="@Model.PageNumber">
+                    Kullanıcı Adı
+                    @if ("username_desc" == ViewBag.CurrentSort)
+                    {
+                        <span class="oi oi-arrow-bottom ml-1"></span>
+                    }
+                    else
+                    {
+                        <span class="oi oi-arrow-top ml-1"></span>
+                    }
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-controller="AdminUser" asp-route-sortOrder="@("email_desc" == ViewBag.CurrentSort ? "email" : "email_desc")" asp-route-page="@Model.PageNumber">
+                    Email
+                    @if ("email_desc" == ViewBag.CurrentSort)
+                    {
+                        <span class="oi oi-arrow-bottom ml-1"></span>
+                    }
+                    else
+                    {
+                        <span class="oi oi-arrow-top ml-1"></span>
+                    }
+                </a>
+            </th>
+            <th>Düzenle</th>
+            <th>Sil</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td><a class="btn btn-outline-success" asp-action="Edit" asp-controller="AdminUser" asp-route-id="@user.Id">Düzenle</a></td>
+                <td><a class="btn btn-outline-danger" asp-action="Delete" asp-controller="AdminUser" asp-route-id="@user.Id">Sil</a>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination-container">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort }))
+</div>
+

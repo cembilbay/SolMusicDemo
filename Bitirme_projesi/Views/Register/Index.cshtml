@@ -1,0 +1,60 @@
+﻿@model UserSignUpViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<section>
+    <div class="container">
+        <h3 class="text-center mt-5">Kayıt Ol</h3>
+        <div class="inner-sec">
+            <div class="login p-5 bg-light mx-auto mw-100">
+                <form class="m-t" role="form" asp-action="Index" enctype="multipart/form-data">
+                    <div class="form-group mt-3">
+                        <span asp-validation-for="@Model.NameSurname" class="text-danger"></span>
+                        <input type="text" class="form-control" asp-for="@Model.NameSurname" placeholder="Adınız Soyadınız">
+                    </div>
+                    <div class="form-group mt-3">
+                        <span asp-validation-for="@Model.Mail" class="text-danger"></span>
+                        <input type="email" class="form-control" asp-for="@Model.Mail" placeholder="Email">
+                    </div>
+                    <div class="form-group mt-3">
+                        <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                        <input type="text" class="form-control" asp-for="@Model.UserName" placeholder="Kullanıcı Adınız">
+                    </div>
+                    <div class="form-group mt-3">
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        <input type="password" class="form-control" asp-for="@Model.Password" placeholder="Şifre" required="">
+                    </div>
+                    <div class="form-group mt-3">
+                        <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                        <input type="password" class="form-control" asp-for="@Model.ConfirmPassword" placeholder="Şifre Tekrar" required="">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="btn1" required="">
+                        <label class="form-check-label" for="btn1">
+                            Kullanım şartlarını okudum kabul ediyorum
+                            <i class="fas fa-info-circle"></i>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit mb-4">Kayıt Ol</button>
+
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                </form>
+                <p class="m-t"> <small>Cem Bilbay | Tüm Hakları Saklıdır &copy; @DateTime.Now</small> </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#btn1").click(function () {
+            if ($(this).is(":checked")) {
+                swal("Site Kabul Şartları", "Sitemizde verdiğiniz mail adresi üzerinden bilgi ve haber e-postaları spam ölçüsünde varmadan gönderilmeye devam edilecektir. Eğer e-posta bülteninden çıkmak isterseniz mail ileti dizisini durdurabilirsiniz, şifre ve mail adresleriniz şifrelenmiş formatta herhangi bir kullanıcının göremeyeceği şekilde veritabanlarımızda saklanmaktadır");
+            }
+        });
+    </script>
+</section>
+

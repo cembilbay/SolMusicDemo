@@ -1,0 +1,30 @@
+﻿@model Bitirme_projesi.Areas.Admin.Models.AboutModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>Hakkımızda İçeriğini Düzenle</h1>
+<form id="aboutForm" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="AboutName1">1.Başlığı düzenle</label>
+        <input asp-for="AboutName1" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="AboutName2">2.Başlığı düzenle</label>
+        <input asp-for="AboutName2" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="AboutContent1">1.Hakkımızda İçeriği Düzenle</label>
+        <textarea asp-for="AboutContent1" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="AboutContent2">2.Hakkımızda İçeriği Düzenle</label>
+        <textarea asp-for="AboutContent2" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="AboutImageFile">Hakkımızda İçeriği Resmi Yükle</label>
+        <input asp-for="AboutImageFile" type="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">İçeriği Güncelle</button>
+</form>

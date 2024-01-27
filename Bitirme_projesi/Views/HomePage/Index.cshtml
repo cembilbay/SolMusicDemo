@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<body>
+    <!-- Hero section -->
+    <section class="hero-section">
+        <div class="hero-slider owl-carousel">
+            <div class="hs-item">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hs-text">
+                                <h2>Herkes için <span>müzik</span></h2>
+                                <p>Sitemize üye olup müzik dünyası hakkındaki haberlerden haberdar olmak ister misiniz? </p>
+                                <a href="/Register/Index" class="site-btn">Hemen Üye olun</a>
+                                <a href="/News/Index" class="site-btn sb-c2">Haberlere göz atın</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="hr-img">
+                                <img src="~/solmusic-master/solmusic-master/img/hero-bg.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hs-item">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hs-text">
+                                <h2><span>Müzik </span> önerileri alın.</h2>
+                                <p>Seçtiğin şarkıya göre benzer şarkı önerileri alın. </p>
+                                <a href="/Register/Index" class="site-btn">Hemen Üye olun</a>
+                                <a href="/News/Index" class="site-btn sb-c2">Haberlere göz atın</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="hr-img">
+                                <img src="~/solmusic-master/solmusic-master/img/hero-bg.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero section end -->
+    <!-- Intro section -->
+    @await Html.PartialAsync("~/Views/Recommend/PartialRecommend.cshtml", new { ViewBag.SongList })
+    <!-- Intro section end -->
+    <!-- How section -->
+    <section class="how-section spad set-bg" data-setbg="~/solmusic-master/solmusic-master/img/how-to-bg.jpg">
+        <div class="container text-white">
+            <div class="section-title">
+                <h2>Nasıl Çalışır?</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="how-item">
+                        <div class="hi-icon">
+                            <img src="~/solmusic-master/solmusic-master/img/icons/brain.png" alt="">
+                        </div>
+                        <h4>Giriş Yap veya Hesap Oluştur</h4>
+                        <p>
+                            Platforma giriş yap veya yeni bir hesap oluştur.
+                            Kişiselleştirilmiş müzik önerilerini almak için tercihlerini belirt.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="how-item">
+                        <div class="hi-icon">
+                            <img src="~/solmusic-master/solmusic-master/img/icons/pointer.png" alt="">
+                        </div>
+                        <h4>Dinlediğin Şarkılara Göre Öneriler Al</h4>
+                        <p>
+                            Son dinlediğin şarkıyı seç.
+                            Algoritma, tercihlerine uygun yeni şarkıları önerir.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="how-item">
+                        <div class="hi-icon">
+                            <img src="~/solmusic-master/solmusic-master/img/icons/smartphone.png" alt="">
+                        </div>
+                        <h4>Özel Çalma Listeni Keyfini Çıkar</h4>
+                        <p>
+                            Özel çalma listenizle müziğin tadını çıkarın.
+                            Buraya müzik öneri sisteminin sunduğu eşsiz özellikleri ekleyerek deneyiminizi daha da özelleştirin.
+                            Müzik dünyasında benzersiz bir yolculuğa hazır mısınız?
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- How section end -->
+
+    </body>

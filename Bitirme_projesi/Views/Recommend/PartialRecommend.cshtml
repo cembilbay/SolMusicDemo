@@ -1,0 +1,283 @@
+﻿<style>
+    .progress-container {
+        position: relative;
+    }
+
+    #progressBarContainer {
+        display: none;
+        position: absolute;
+        top: 80%; /* Progress bar'ın konumunu aşağıya çektim */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        opacity: 0.9;
+        width: 80%; /* Progress bar'ın genişliğini ayarladım */
+        max-width: 400px; /* Max genişliği belirledim */
+        height: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 20px; /* Yeni eklenen kısım: Progress bar ile mesaj divleri arasına margin ekledim */
+    }
+
+    .progress-bar {
+        width: 0;
+        height: 100%;
+        border-radius: 5px;
+        background-color: #3498db;
+        color: #000;
+        text-align: center;
+        line-height: 20px;
+    }
+
+    #loadingMessage {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 10px; /* Yeni eklenen kısım: Mesaj divleri arasına margin ekledim */
+    }
+</style>
+
+
+
+<section class="intro-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="section-title">
+                    <h2>Müzik Öneri Sistemi</h2>
+                    <strong>Seçtiğiniz şarkıya göre benzer şarkı önerileri alın.</strong>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="info-section">
+                    <h3>Nasıl Çalışır?</h3>
+                    <p>
+                        Müzik öneri sistemimiz, seçtiğiniz şarkıya benzer şarkıları önermek için geliştirilmiştir.
+                        şarkı seçin ve önerileri görüntüleyin!
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <form method="post" onsubmit="event.preventDefault(); showRecommendations();">
+                    <div class="form-group">
+                        <label for="selectedSong">Şarkı Seçiniz:</label>
+                        <select name="selectedSong" class="form-control" id="selectedSong">
+                            @foreach (var song in ViewBag.SongList)
+                            {
+                                <option value="@song">@song</option>
+                            }
+                        </select>
+                    </div>
+
+                    <input type="submit" class="site-btn" value="Önerileri Göster!" />
+
+                    <div class="progress-container">
+                        <div id="loadingMessage"></div>
+                        <div id="progressBarContainer">
+                            <div class="progress-bar" id="progressBar">0%</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="notification" class="notification alert" role="alert"></div>
+
+
+        <div class="row container-fluid mt-5 justify-content-between" id="recommendedSongsContainer">
+
+            @if (ViewBag.RecommendedSongs != null && ViewBag.RecommendedSongs.Count > 0)
+            {
+                @foreach (var recommendedSong in ViewBag.RecommendedSongs)
+                {
+                    <div class="col-xl-2 col-lg-2 col-md-4 col-sm-5 col-12 mt-5">
+                        <div class="similar-song">
+                            <img class="ss-thumb" src="@recommendedSong.ThumbnailUrl" alt="">
+                            <h4>@recommendedSong.Singer</h4>
+                            <p>@recommendedSong.SongName</p>
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</section>
+
+
+
+<script>
+    function showRecommendations() {
+        var selectedSong = document.getElementById("selectedSong").value;
+
+     
+        $("#progressBarContainer").show();
+        $("#loadingMessage").text("Öneriler Yükleniyor...");
+
+        $.ajax({
+            type: "POST",
+            url: "/Recommend/PartialRecommend",
+            data: { selectedSong: selectedSong },
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (e) {
+                    if (e.lengthComputable) {
+                        var percentComplete = (e.loaded / e.total) * 100;
+                        $("#progressBar").width(percentComplete + "%");
+                        $("#progressBar").text(percentComplete.toFixed(0) + "%");
+                    }
+                }, false);
+                return xhr;
+            },
+            success: function (data) {
+                console.log(data);
+              
+                $("#recommendedSongsContainer").empty();
+                var container = document.getElementById("recommendedSongsContainer");
+                container.innerHTML = '<h3>Önerilen Şarkılar</h3><div class="container-fluid">';
+
+                for (var i = 0; i < data.length; i++) {
+                    container.innerHTML += '<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5 col-12 mt-5">' +
+                        '<div class="similar-song">' +
+                        '<img class="ss-thumb" src="' + data[i].album_cover + '" alt="">' +
+                        '<h4>' + data[i].singer + '</h4>' +
+                        '<p>' + data[i].song + '</p>' +
+                        '<i id="starIcon_' + i + '" class="fa ' + (data[i].isFavorite ? 'fas' : 'far') + ' fa-star" onclick="addToFavorites(\'' + data[i].song + '\', \'' + data[i].singer + '\', \'' + data[i].album_cover + '\', ' + i + ')" onmouseover="changeCursor(this)" onmouseout="restoreCursor(this)"></i>' +
+                        '</div>' +
+                        '</div>';
+                    checkFavoriteStatus(data[i].song, data[i].singer, data[i].album_cover, i);
+                }
+
+                container.innerHTML += '</div></div>';
+
+                $("#progressBarContainer").hide();
+                $("#loadingMessage").text("");
+            },
+            error: function (error) {
+                console.log(error);
+
+                $("#progressBarContainer").hide();
+                $("#loadingMessage").text("");
+            }
+        });
+    }
+
+    function addToFavorites(song, singer, albumCover, index) {
+        $.ajax({
+            type: "POST",
+            url: "/UserMusic/AddToFavorites",
+            data: { song: song, singer: singer, albumCover: albumCover },
+            success: function (result) {
+                var message = result.message; 
+                if (result.success) {
+                    handleAddToFavoritesSuccess(message, index);
+                } else {
+                    
+                    handleAddToFavoritesError(message);
+                }
+            },
+            error: function (error) {
+                
+                handleAddToFavoritesError("Bir hata oluştu.");
+                console.log(error);
+            }
+        });
+    }
+
+    function handleAddToFavoritesSuccess(message, index) {
+        showNotification(message, 'success');
+        var starIcon = $("#starIcon_" + index);
+
+        if (starIcon.hasClass('far')) {
+            // If the star icon is empty, make it filled
+            animateStarIcon(index);
+            starIcon.removeClass('far').addClass('fas').css('color', 'yellow');
+        } else {
+            // If the star icon is filled, make it empty
+            animateEmptyStarIcon(index);
+            starIcon.removeClass('fas').addClass('far').css('color', '');
+        }
+    }
+    function animateStarIcon(index) {
+        
+        var starIcon = $("#starIcon_" + index);
+        starIcon.removeClass('far').addClass('fas').css('color', 'yellow');
+        starIcon.animate({ fontSize: '1.5em' }, 300, function () {
+            starIcon.animate({ fontSize: '1em' }, 300);
+        });
+    }
+    function animateEmptyStarIcon(index) {
+        var starIcon = $("#starIcon_" + index);
+        starIcon.removeClass('fas').addClass('far').css('color', '');
+        starIcon.animate({ fontSize: '1.5em' }, 300, function () {
+            starIcon.animate({ fontSize: '1em' }, 300);
+        });
+    }
+
+  
+    function handleAddToFavoritesError(message, index) {
+        showNotification(message, 'error');
+       
+    }
+
+    function showNotification(message, type) {
+        var notificationDiv = document.getElementById('notification');
+
+        notificationDiv.innerHTML = message;
+
+        if (type === 'success') {
+            notificationDiv.classList.add('alert-success');
+        } else if (type === 'error') {
+            notificationDiv.classList.add('alert-danger');
+        }
+
+        setTimeout(function () {
+            notificationDiv.innerHTML = '';
+            notificationDiv.classList.remove('alert-success', 'alert-danger');
+        }, 5000); 
+    }
+
+    function checkFavoriteStatus(song, singer, albumCover, index) {
+      
+        $.ajax({
+            type: "GET",
+            url: "/UserMusic/IsFavorite",
+            data: { song: song, singer: singer, albumCover: albumCover },
+            success: function (isFavorite) {
+                toggleStarIcon(isFavorite, index);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+   
+    function toggleStarIcon(isFilled, index) {
+        var starIcon = document.getElementById('starIcon_' + index);
+        starIcon.classList.remove(isFilled ? 'far' : 'fas');
+        starIcon.classList.add(isFilled ? 'fas' : 'far');
+        if (isFilled) {
+            starIcon.style.color = 'yellow'; 
+        }
+    }
+
+    
+    function changeCursor(element) {
+        element.style.cursor = 'pointer';
+    }
+
+    function restoreCursor(element) {
+        element.style.cursor = 'auto';
+    }
+</script>
+
+
+
+
+
+
+

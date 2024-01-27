@@ -1,0 +1,34 @@
+﻿<link rel="stylesheet" href="~/css/profil.css" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+<header class="header-section clearfix">
+    <a href="/HomePage/Index" class="site-logo">
+        <img src="~/solmusic-master/solmusic-master/img/logo.png" alt="">
+    </a>
+    @await Component.InvokeAsync("ProfileDropdown")
+
+
+    <ul class="main-menu">
+        <li><a href="/HomePage/Index">Anasayfa</a></li>
+        <li><a href="/About/Index">Hakkımızda</a></li>
+        <li><a href="/News/Index">Haberler</a></li>
+        <li><a href="/Contact/Index">İletişim</a></li>
+    </ul>
+</header>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let profileDropdownList = document.querySelector(".profile-dropdown-list");
+        let btn = document.querySelector(".profile-dropdown-btn");
+
+        const toggle = () => profileDropdownList.classList.toggle("active");
+
+        btn.addEventListener("click", function (e) {
+            e.stopPropagation(); // Bu, document click event'i tetiklemesini engeller
+            toggle();
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!btn.contains(e.target)) profileDropdownList.classList.remove("active");
+        });
+    });
+</script>

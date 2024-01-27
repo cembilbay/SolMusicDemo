@@ -1,0 +1,50 @@
+﻿@model EntityLayer.Concrate.Contact
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<section class="contact-section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 p-0">
+                <!-- Map -->
+                <div class="map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4410.905640534958!2d26.967130648063645!3d38.580278684005734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14bbce0d70291201%3A0xc309f7e92ee72bd9!2zxLB6bWlyIEJha8SxcsOnYXkgw5xuaXZlcnNpdGVzaQ!5e0!3m2!1str!2str!4v1705935182516!5m2!1str!2str" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+            </div>
+            <div class="col-lg-6 p-0">
+                <div class="contact-warp">
+                    <div class="section-title mb-0">
+                        <h2>Bizimle İletişime Geçin</h2>
+                    </div>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    <ul>
+                        <li>Menemen/İzmir</li>
+                        <li>+90 531 615 80 62</li>
+                        <li>cembilbay62@gmail.com</li>
+                    </ul>
+                    <form class="contact-from" method="post" asp-controller="Contact" asp-action="Index">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Your name" name="ContactUserName" asp-for="ContactUserName">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Your e-mail" name="ContactMail" asp-for="ContactMail">
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" placeholder="Subject" name="ContactSubject" asp-for="ContactSubject">
+                                <textarea placeholder="Message" name="ContactMessage" asp-for="ContactMessage"></textarea>
+                                <button class="site-btn" type="submit">Mesajınızı Gönderin</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

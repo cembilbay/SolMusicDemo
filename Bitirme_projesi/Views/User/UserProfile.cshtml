@@ -1,0 +1,102 @@
+﻿@model CoreDemo.Models.UserEditModel
+@{
+    ViewData["Title"] = "UserProfile";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<style>
+    .custom-btn-primary {
+        background-color: #4CAF50; /* Yeşil renk */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .custom-btn-primary:hover {
+            background-color: white; /* Beyaz renk */
+            color: black;
+            border: 1px solid #4CAF50;
+        }
+
+    .custom-btn-cancel {
+        background-color: #E57373; /* Kırmızı renk */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+        .custom-btn-cancel:hover {
+            background-color: white; /* Beyaz renk */
+            color: black;
+            border: 1px solid #E57373;
+        }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Profil Bilgilerini Düzenleme</h4>
+
+                    <form class="forms-sample" method="post" role="form" asp-action="UserProfile" enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label for="exampleInputName1">Yazar Ad Soyad</label>
+                            <input type="text" asp-for="@Model.NameSurname" class="form-control" />
+                            <span asp-validation-for="@Model.NameSurname" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">Kullanıcı Adı</label>
+                            <input type="text" asp-for="@Model.UserName" class="form-control" />
+                            <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">Mail Adresi</label>
+                            <input type="text" asp-for="@Model.UserMail" class="form-control" />
+                            <span asp-validation-for="@Model.UserMail" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">Yeni Şifreniz</label>
+                            <input type="password" asp-for="@Model.UserPassword" class="form-control" />
+                            <span asp-validation-for="@Model.UserPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">Şifreyi Onayla</label>
+                            <input type="password" asp-for="@Model.ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="custom-btn-primary">Güncelle</button>
+                            <button type="button" class="custom-btn-cancel">İptal</button>
+                        </div>
+
+                        <div class="text-danger mt-3" asp-validation-summary="ModelOnly"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

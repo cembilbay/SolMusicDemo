@@ -1,0 +1,55 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<EntityLayer.Concrate.Contact>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>İletişim Mesajları</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>İsim</th>
+            <th>Mail Adresi</th>
+            <th>Konu</th>
+            <th>Tarih</th>
+            <th>Status</th>
+            <th>Yapılacak İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contact in Model)
+        {
+            <tr>
+                <td>@contact.ContactID</td>
+                <td>@contact.ContactUserName</td>
+                <td>@contact.ContactMail</td>
+                <td>@contact.ContactSubject</td>
+                <td>@contact.ContactDate</td>
+                <td>@contact.ContactStatus</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@contact.ContactID" class="btn btn-outline-primary">Ayrıntılar</a> |
+                    <form asp-action="Delete" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@contact.ContactID" />
+                        <button type="submit" class="btn btn-outline-danger">Sil</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+
+

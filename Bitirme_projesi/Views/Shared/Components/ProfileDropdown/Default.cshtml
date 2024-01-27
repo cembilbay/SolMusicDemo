@@ -1,0 +1,76 @@
+﻿
+<div class="header-right">
+    @if (User.Identity.IsAuthenticated)
+    {
+        @foreach (var item in ViewBag.user)
+        {
+            <div class="profile-dropdown">
+                <div onclick="toggle()" class="profile-dropdown-btn">
+                    <div class="profile-img">
+                        <img src="~/pngtree-man-wearing-headphones-is-standing-in-front-of-a-neon-background-picture-image_2640414.jpg" alt="Profile Image">
+                        <i class="fa-solid fa-circle"></i>
+                    </div>
+                    
+                    <span>
+                        @item.UserName
+                        <i class="fa-solid fa-angle-down"></i>
+                    </span>
+                </div>
+
+                <ul class="profile-dropdown-list">
+                    <li class="profile-dropdown-list-item">
+                        <a href="/User/UserProfile">
+                            <i class="fa-regular fa-user"></i>
+                            Profili Düzenle
+                        </a>
+                    </li>
+
+                    @*<li class="profile-dropdown-list-item">
+                        <a href="#">
+                            <i class="fa-regular fa-envelope"></i>
+                            Gelen Kutusu
+                        </a>
+                    </li>*@
+
+                    <li class="profile-dropdown-list-item">
+                        <a href="/UserMusic/Index">
+                            <i class="fa-solid fa-star-o"></i>
+                            Favori Şarkılar
+                        </a>
+                    </li>
+
+                    <li class="profile-dropdown-list-item">
+                        <a href="#">
+                            <i class="fa-solid fa-sliders"></i>
+                            Ayarlar
+                        </a>
+                    </li>
+
+                    <li class="profile-dropdown-list-item">
+                        <a href="/Contact/Index">
+                            <i class="fa-regular fa-circle-question"></i>
+                            Yardım & İletişim
+                        </a>
+                    </li>
+                    <hr />
+
+                    <li class="profile-dropdown-list-item">
+                        <a href="/Login/LogOut">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Çıkış Yap
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+
+
+    }
+    else
+    {
+        <div class="user-panel">
+            <a href="/Login/Index" class="login">Giriş Yap</a>
+            <a href="/Register/Index" class="register">Hesap Oluştur</a>
+        </div>
+    }
+</div>

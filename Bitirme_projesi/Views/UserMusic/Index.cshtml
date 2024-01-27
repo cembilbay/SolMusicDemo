@@ -1,0 +1,122 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<EntityLayer.Concrate.UserMusic>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+    }
+
+        .pagination li {
+            margin: 0 5px;
+            display: inline-block;
+        }
+
+        .pagination a {
+            display: block;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF; /* Mavi arka plan rengi */
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .pagination a:hover {
+                background-color: #0056b3; /* Hover olduğunda daha koyu bir mavi */
+            }
+</style>
+<body>
+    <div class="container">
+        <br />
+        <h1 class="text-center mt-5">Favori Şarkılar</h1>
+        <br />
+        <div id="notification" class="notification alert" role="alert"></div>
+        <div class="row container-fluid mt-5 justify-content-between" id="recommendedSongsContainer">
+            @foreach (var item in Model)
+            {
+                <div class="col-xl-2 col-lg-2 col-md-4 col-sm-5 col-12 mt-5">
+                    <div class="similar-song">
+                        <img class="ss-thumb" src="@item.AlbumCoverUrl" alt="">
+                        <h4>@item.Singer</h4>
+                        <p>@item.SongName</p>
+                        <i class="fa fa-star" style="color:yellow" data-song-id="@item.ID" onclick="toggleFavorite(this)"></i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <br />
+    <div class="pagination">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+    </div>
+    <br />
+    <br />
+
+</body>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    function toggleFavorite(element) {
+        var songId = $(element).data("song-id");
+
+
+        $.ajax({
+            type: "POST",
+            url: "/UserMusic/DeleteUserMusic",
+            data: { id: songId },
+            success: function (result) {
+                if (result.success) {
+                    showNotification(result.message, 'success');
+                    animateEmptyStarIcon(element);
+                    $(element).closest('.col-xl-2').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            },
+            error: function (error) {
+                showNotification("Bir hata oluştu.", 'error');
+                console.log(error);
+            }
+        });
+    }
+
+    function animateEmptyStarIcon(element) {
+        var starIcon = $(element);
+        starIcon.removeClass('fas').addClass('far').css('color', 'yellow');
+        starIcon.animate({ fontSize: '1.5em' }, 300, function () {
+            starIcon.animate({ fontSize: '1em' }, 300);
+        });
+    }
+
+    function showNotification(message, type) {
+        var notificationDiv = document.getElementById('notification');
+
+        notificationDiv.innerHTML = message;
+
+        if (type === 'success') {
+            notificationDiv.classList.add('alert-primary');
+        } else if (type === 'error') {
+            notificationDiv.classList.add('alert-danger');
+        }
+
+        setTimeout(function () {
+            notificationDiv.innerHTML = '';
+            notificationDiv.classList.remove('alert-primary', 'alert-danger');
+        }, 5000);
+    }
+
+
+</script>
+
+
+
