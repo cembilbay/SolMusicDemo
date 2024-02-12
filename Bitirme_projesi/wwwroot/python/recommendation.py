@@ -28,8 +28,8 @@ def recommend(song_name):
     return recommended_songs
 
 def get_album_cover_url(song_name, artist_name):
-    CLIENT_ID = "9ffd903cac69483493e0e7e091fad133"
-    CLIENT_SECRET = "43a99f4595e548b58e079fd6ec1ed367"
+    CLIENT_ID = "Your_client_ıd"
+    CLIENT_SECRET = "your_client_secret"
 
     # Spotify API'ya erişim için kimlik doğrulamasını yap
     client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
